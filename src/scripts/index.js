@@ -35,7 +35,7 @@ function handleFormSubmit(event) {
   event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
-  closeModal(event.target.closest('.popup'));
+  closeModal(popupTypeEdit);
 }
 // Прикрепляем обработчик к форме: он будет следить за событием “submit” - «отправка»
 formElement.addEventListener('submit', handleFormSubmit);
@@ -57,7 +57,7 @@ buttonProfileAdd.addEventListener('click', function() {
 function addCardFormSubmit(event) {
   event.preventDefault(); // Эта строчка отменяет стандартную отправку формы.
   placesList.prepend(createCard(popupInputPlaceUrl.value, popupInputPlaceName.value, removeCard, like, openCardImage));//prepend - в начало
-  closeModal(event.target.closest('.popup'));
+  closeModal(popupTypeNewCard);
   newPlace.reset();//Сброс полей ввода — происходит событие reset
 }
 // Прикрепляем обработчик к форме: он будет следить за событием “submit” - «отправка»

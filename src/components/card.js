@@ -2,9 +2,10 @@
 //из него должна экспортироваться функция createCard, которую вы создали раньше (у вас она может называться по-другому).
 //Функции, обрабатывающие события лайка и удаления карточки, также должны находиться в этом файле и экспортироваться из него.
 
+const cardTemplate = document.getElementById("card-template").content; //тк id #card-template, обращаемся к содержимому
+
 // @todo: Функция создания карточки
 export function createCard(link, name, removeCard, like, openCardImage) {
-  const cardTemplate = document.getElementById("card-template").content; //тк id #card-template, обращаемся к содержимому
   const card = cardTemplate.querySelector('.card').cloneNode(true); // клонируем содержимое тега, шаблон
 
   // вводим переменные
