@@ -1,0 +1,17 @@
+.popup__error_visible {
+  opacity: 1;
+  color: #F00;
+  font-size: 12px;
+  /*position: absolute;*/
+}
+
+.popup__input_type_error {
+  border-bottom: 1px solid rgb(255, 0,0);
+}
+
+.popup__button_disabled {
+  background-color: transparent;
+  color: rgb(0,0,0, 0.2);
+  border-color: rgb(0,0,0, 0.2);
+  border: 1px solid; /*тк изнчально у кнопки нет бордера*/
+}

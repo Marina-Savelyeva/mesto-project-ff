@@ -1,0 +1,5 @@
+.like-section {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+}

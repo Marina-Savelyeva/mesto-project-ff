@@ -1,0 +1,37 @@
+.profile__image_section {
+  cursor: pointer;
+  position: relative;
+}
+
+.profile__image_section::before {
+  content: "";
+  background-color: rgb(0, 0, 0, 0.8);
+  position: absolute;
+  block-size: 100%;
+  inline-size: 100%;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+
+.profile__image_section::after {
+  content:"";
+  position: absolute;
+  top: 47px;
+  left:47px;
+  background-image: url('../images/Vector.svg');
+  width: 26px;
+  height: 26px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.profile__image_section:hover::before,
+.profile__image_section:hover::after {
+  transition: 0.5s;
+  opacity: 1;
+}
+
+
