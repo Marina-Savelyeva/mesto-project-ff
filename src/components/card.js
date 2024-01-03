@@ -2,7 +2,7 @@
 //из него должна экспортироваться функция createCard, которую вы создали раньше (у вас она может называться по-другому).
 //Функции, обрабатывающие события лайка и удаления карточки, также должны находиться в этом файле и экспортироваться из него.
 
-import {deleteCard, numberLikes, numberDisLikes} from '../components/api';
+import {deleteCard, addLike, disLike} from '../components/api';
 
 const cardTemplate = document.getElementById("card-template").content; //тк id #card-template, обращаемся к содержимому
 
@@ -47,31 +47,24 @@ export function createCard(item, userId, openCardImage, removeCard, like) {
 
 // @todo: Функция удаления карточки
 export function removeCard (card) {
-  deleteCard(card.dataset.cardId);
-  card.remove();
+  deleteCard(card.dataset.cardId)
+  .then(() => {card.remove()})
+  .catch((err) => {
+    console.log(err);
+  })
 }
 
 // Функция лайка
 export function like(event, cardId) {
   const likeNumber = event.target.parentNode.querySelector('.card-like-count');
-  if (event.target.classList.contains('card__like-button_is-active')){
-    numberDisLikes(cardId)
+  const likeMethod = event.target.classList.contains('card__like-button_is-active') ? disLike : addLike;
+  likeMethod(cardId)
     .then ((card)=>{
       likeNumber.textContent = card.likes.length;
-      event.target.classList.remove('card__like-button_is-active'); //target - элемент, на котором сработало событие
+      event.target.classList.toggle('card__like-button_is-active'); //target - элемент, на котором сработало событие
     })
     .catch((err) =>{
       console.log(err);
     })
-  }else{
-    numberLikes(cardId)
-    .then ((card)=>{
-      likeNumber.textContent = card.likes.length;
-      event.target.classList.add('card__like-button_is-active'); //target - элемент, на котором сработало событие
-    })
-    .catch((err) =>{
-      console.log(err);
-    })
-  }
 }
 

@@ -1,6 +1,6 @@
 // включение валидации вызовом enableValidation
 // все настройки передаются при вызове
-/*validationEnable({
+/*validationConfig({
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button',
@@ -11,80 +11,83 @@
 /*Сделайте функцию enableValidation ответственной за включение валидации всех форм.
 Пусть она принимает все нужные функциям классы и селекторы элементов как объект настроек.*/
 
-export function enableValidation(validationEnable){
-  const formlist = Array.from(document.querySelectorAll(validationEnable.formSelector));//добавили на каждую форму по селектору
+export function enableValidation(validationConfig){
+  const formlist = Array.from(document.querySelectorAll(validationConfig.formSelector));//добавили на каждую форму по селектору
   formlist.forEach((formElement)=>{
     formElement.addEventListener('submit', (event) => {event.preventDefault();});
-    setEventListeners(formElement, validationEnable);
+    setEventListeners(formElement, validationConfig);
 });
 };
 
-function isValid(formElement, inputElement, validationEnable){
+function isValid(formElement, inputElement, validationConfig){
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);// встроенный метод setCustomValidity принимает на вход строку и заменяет ею стандартное сообщение об ошибке
   } else {
     inputElement.setCustomValidity(""); // если передать пустую строку, то будут доступны стандартные браузерные сообщения
   }
   if (!inputElement.validity.valid) { // теперь, если ошибка вызвана регулярным выражением, переменная validationMessage хранит наше кастомное сообщение
-    showInputError(formElement, inputElement, inputElement.validationMessage, validationEnable);
+    showInputError(formElement, inputElement, inputElement.validationMessage, validationConfig);
   } else {
-    hideInputError(formElement, inputElement, validationEnable);
+    hideInputError(formElement, inputElement, validationConfig);
   }
 };
 
-function showInputError(formElement, inputElement, errorMessage, validationEnable){//добавление классы ошибок
+function showInputError(formElement, inputElement, errorMessage, validationConfig){//добавление классы ошибок
   const errorInput = formElement.querySelector(`.${inputElement.id}-error`);
   //console.log(errorInput);
-  inputElement.classList.add(validationEnable.inputErrorClass); //inputElement.classList.add('popup__input_type_error');
+  inputElement.classList.add(validationConfig.inputErrorClass); //inputElement.classList.add('popup__input_type_error');
   errorInput.textContent = errorMessage;
-  errorInput.classList.add(validationEnable.errorClass); //errorInput.classList.add('popup__error_visible');
+  errorInput.classList.add(validationConfig.errorClass); //errorInput.classList.add('popup__error_visible');
 };
 
-function hideInputError(formElement, inputElement, validationEnable){//удалили классы ошибок, противоположно функции выше
+function hideInputError(formElement, inputElement, validationConfig){//удалили классы ошибок, противоположно функции выше
   const errorInput = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove(validationEnable.inputErrorClass);
+  inputElement.classList.remove(validationConfig.inputErrorClass);
   errorInput.textContent = "";
-  errorInput.classList.remove(validationEnable.errorClass);
+  errorInput.classList.remove(validationConfig.errorClass);
 };
 
-function toogleButton(inputList, buttonElement, validationEnable){//кнопка
+function toogleButton(inputList, buttonElement, validationConfig){//кнопка
   // сделай кнопку неактивной
-  if (invalidInput(inputList)) {
-    buttonElement.disabled = true;
-    buttonElement.classList.add(validationEnable.inactiveButtonClass);//popup__button_disabled
+  if (hasInvalidInput(inputList)) {
+    disableSubmitButton(buttonElement, validationConfig);
   }else{
     // иначе сделай кнопку активной
     buttonElement.disabled = false;
-    buttonElement.classList.remove(validationEnable.inactiveButtonClass);//popup__button_disabled
+    buttonElement.classList.remove(validationConfig.inactiveButtonClass);//popup__button_disabled
   }
 };
 
-function invalidInput(inputList){
+function hasInvalidInput(inputList){
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     })
 };
 
+function  disableSubmitButton(buttonElement, validationConfig){//добавила метод disabled
+  buttonElement.disabled = true;
+  buttonElement.classList.add(validationConfig.inactiveButtonClass);//popup__button_disabled
+}
 
-function setEventListeners(formElement, validationEnable){
-    const inputList = Array.from(formElement.querySelectorAll(validationEnable.inputSelector)); //находим ввод данных
-    const buttonElement = formElement.querySelector(validationEnable.submitButtonSelector);//находим кнопку отправки
-    toogleButton(inputList, buttonElement, validationEnable);
+function setEventListeners(formElement, validationConfig){
+    const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector)); //находим ввод данных
+    const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);//находим кнопку отправки
+    toogleButton(inputList, buttonElement, validationConfig);
     inputList.forEach((inputElement)=>{
       inputElement.addEventListener('input', ()=>{
-        isValid(formElement, inputElement, validationEnable);
-        toogleButton(inputList, buttonElement, validationEnable);//кнопка
+        isValid(formElement, inputElement, validationConfig);
+        toogleButton(inputList, buttonElement, validationConfig);//кнопка
       })
     }
     )
 };
 
-export function clearValidation(formElement, validationEnable){//чистка
-  const inputList = Array.from(formElement.querySelectorAll(validationEnable.inputSelector)); //находим ввод данных
-  const buttonElement = formElement.querySelector(validationEnable.submitButtonSelector);//находим кнопку отправки
-  buttonElement.classList.add(validationEnable.inactiveButtonClass);//popup__button_disabled
+export function clearValidation(formElement, validationConfig){//чистка
+  const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector)); //находим ввод данных
+  const buttonElement = formElement.querySelector(validationConfig.submitButtonSelector);//находим кнопку отправки
+  disableSubmitButton(buttonElement, validationConfig);
   inputList.forEach((inputElement)=>{
-    hideInputError(formElement, inputElement, validationEnable);
+    hideInputError(formElement, inputElement, validationConfig);
     inputElement.setCustomValidity('');
   });
 };

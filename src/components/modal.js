@@ -21,24 +21,8 @@ function closeModalEsc(event) {
   }
 }
 
-//закрытие по нажатию на крестик
-function clickCloseButton(event) {
-  if (event.target.classList.contains('popup__close')) {
-    closeModal(event.target.closest('.popup_is-opened'));//ищем обьект нужного класса и убираем его
+export function clickPopupByClose(event) {
+  if (event.target === event.currentTarget || event.target.classList.contains('popup__close')) {
+    closeModal(event.currentTarget);//ищем обьект нужного класса и убираем его
   }
 }
-
-const modals = document.querySelectorAll(".popup");//ищем все попапы
-
-function clickClose() {
-  modals.forEach(function(popup){
-    popup.addEventListener("click", function(event){
-      if (popup.target === popup.currentTarget){//закртыие оверлеем
-        closeModal(event.target);
-      }
-      clickCloseButton(event);//закрытие по нажатию на крестик
-    });
-  });
-}
-
-clickClose();

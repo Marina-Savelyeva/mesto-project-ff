@@ -1,3 +1,3 @@
-export function loading(event, button){
-  (!event)? button.textContent = "Сохранить": button.textContent = "Сохранение...";
+export function changeButtonLoadingText(loadingStatus, button){
+  button.textContent = loadingStatus ? "Сохранение..." : "Сохранить";
 }

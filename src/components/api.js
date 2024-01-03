@@ -5,18 +5,18 @@ const config = {
     'Content-Type': 'application/json'
   }
 };
+//Код обработки результат
+const  processRequest= res => {
+  return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
+}
 
 //загрузка инфы о пользователе с сервера (инициализация)
 export const initialUser = () => {
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //карточки с сервера
@@ -24,12 +24,8 @@ export const initialCardsAPI = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers:config.headers
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //Редактирование профиля
@@ -42,12 +38,8 @@ export const changeProfile = (nameInput, jobInput) => {
       about: jobInput
     })
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //Добавление новой карточки
@@ -60,40 +52,28 @@ export const addCardAPI = (placeName, link) => {
       link: link
     })
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //ставим лайк
-export const numberLikes = (cardId) => {
+export const addLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method:'PUT',
     headers: config.headers
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //убираем лайк
-export const numberDisLikes = (cardId) => {
+export const disLike = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method:'DELETE',
     headers: config.headers
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //Удаление карточки
@@ -102,12 +82,8 @@ export const deleteCard = cardId => {
     method:'DELETE',
     headers: config.headers
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
 
 //Обновление аватара пользователя
@@ -119,10 +95,6 @@ export const newAvatar = url => {
       avatar: url
     })
   })
-  .then((res)=>{
-    return (res.ok)? res.json() : Promise.reject(`Что-то не так: ${res.status}`);
-  })
-  .catch((err) =>{
-    console.log(err);
-  })
+  .then((res) =>
+    processRequest(res))
 };
